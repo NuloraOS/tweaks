@@ -1,0 +1,8 @@
+Origin: Nelora
+Label: Nelora
+Architectures: iphoneos-arm
+Description: All tweaks in one source
+SHA256:
+ d80ca33a4bf0ce43b0ad041a697a8e1051ad10afe0c62667b507afc376326044 2256 Packages
+ 4e356c81ae34dc14df0541e11aa54a472fd29f6458eb8c2a43c7684974add4de 969 Packages.gz
+ c93af24d0d2c97248165ba92820bb4d5ed4069d25347a7848b8e1526016cd6c9 1097 Packages.bz2
