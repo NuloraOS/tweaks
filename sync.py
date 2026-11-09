@@ -55,10 +55,12 @@ index = ('\n\n'.join(records) + '\n\n').encode('utf8')
 (out / 'Packages').write_bytes(index)
 (out / 'Packages.gz').write_bytes(gzip.compress(index, mtime=0))
 (out / 'Packages.bz2').write_bytes(bz2.compress(index))
-release = 'Origin: Nelora\nLabel: Nelora\nArchitectures: iphoneos-arm\nDescription: All tweaks in one source\nSHA256:\n'
-for name in ['Packages', 'Packages.gz', 'Packages.bz2']:
-    data = (out / name).read_bytes()
-    release += f' {hashlib.sha256(data).hexdigest()} {len(data)} {name}\n'
+release = 'Origin: Nelora\nLabel: Nelora\nSuite: stable\nVersion: 1.0\nCodename: nelora\nArchitectures: iphoneos-arm\nComponents: main\nDescription: All tweaks in one source\n'
+for field, algorithm in [('MD5Sum', 'md5'), ('SHA1', 'sha1'), ('SHA256', 'sha256'), ('SHA512', 'sha512')]:
+    release += field + ':\n'
+    for name in ['Packages', 'Packages.gz', 'Packages.bz2']:
+        data = (out / name).read_bytes()
+        release += f' {hashlib.new(algorithm, data).hexdigest()} {len(data)} {name}\n'
 (out / 'Release').write_text(release, encoding='utf8')
 (out / 'CydiaIcon.png').write_bytes(fetch('CydiaIcon.png'))
 (out / '.nojekyll').touch()

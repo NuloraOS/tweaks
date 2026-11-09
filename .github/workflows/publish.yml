@@ -22,6 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 sync.py
+      - name: Validate Sileo Release contract and package integrity
+        run: python3 check_repo.py
       - name: Keep all DEBs together in GitHub
         run: |
           git config user.name 'github-actions[bot]'
