@@ -1,7 +1,6 @@
 import bz2
 import gzip
 import hashlib
-import html
 import pathlib
 import re
 import shutil
@@ -18,7 +17,7 @@ def fetch(name, limit=2*1024*1024):
     return data
 
 index = fetch('Packages').decode('utf8')
-records, cards = [], []
+records = []
 descriptions = {
     'camera': 'Камера с удержанием горизонта, записью видео и белым / жёлтым экранным светом.',
     'o2camera': 'Отдельная камера для ролика: оранжевые элементы, круговой зум, ручные параметры. Реальная основная запись 1080p/30; надписи 4K/60 — демонстрационные.',
@@ -39,10 +38,11 @@ for block in index.split('\n\n'):
     if len(data) != int(p['Size']) or hashlib.sha256(data).hexdigest() != p['SHA256']:
         raise ValueError('DEB integrity mismatch')
     filename = pathlib.PurePosixPath(path).name
-    (out / filename).write_bytes(data)
-    # One flat folder on GitHub and one APT category in Sileo.
-    shutil.copyfile(out / filename, filename)
-    block = re.sub(r'^Filename: .+$', 'Filename: ./' + filename, block, flags=re.M)
+    (out / 'debs').mkdir(exist_ok=True)
+    (pathlib.Path('debs')).mkdir(exist_ok=True)
+    (out / 'debs' / filename).write_bytes(data)
+    shutil.copyfile(out / 'debs' / filename, pathlib.Path('debs') / filename)
+    block = re.sub(r'^Filename: .+$', 'Filename: ./debs/' + filename, block, flags=re.M)
     block = re.sub(r'^Section: .+$', 'Section: Tweaks', block, flags=re.M)
     if not re.search(r'^Section:', block, re.M):
         block += '\nSection: Tweaks'
@@ -50,8 +50,6 @@ for block in index.split('\n\n'):
     kind = p['Package'].rsplit('.', 1)[-1]
     icon = 'icon-' + kind + '.png'
     (out / icon).write_bytes(fetch('Icons/nelora-' + kind + '.png'))
-    name, version, description = html.escape(p['Name']), html.escape(p['Version']), html.escape(descriptions.get(kind, p.get('Description', '')))
-    cards.append(f'<article><img src="{icon}" alt="" width="56" height="56"><div><h2>{name}</h2><small>{version} · iOS 12 / Chimera</small><p>{description}</p></div><a class="download" href="{html.escape(filename)}" download>Скачать DEB</a></article>')
 if len(records) != 3:
     raise ValueError('Expected two cameras and Dock; keep the previous source if builds are incomplete')
 index = ('\n\n'.join(records) + '\n\n').encode('utf8')
@@ -67,8 +65,6 @@ for field, algorithm in [('MD5Sum', 'md5'), ('SHA1', 'sha1'), ('SHA256', 'sha256
 (out / 'Release').write_text(release, encoding='utf8')
 (out / 'CydiaIcon.png').write_bytes(fetch('CydiaIcon.png'))
 (out / '.nojekyll').touch()
-page = pathlib.Path('page.html').read_text(encoding='utf8').replace('__CARDS__', ''.join(cards))
-(out / 'index.html').write_text(page, encoding='utf8')
-for name in ['Packages', 'Packages.gz', 'Packages.bz2', 'Release', 'CydiaIcon.png', 'index.html', '.nojekyll']:
+for name in ['Packages', 'Packages.gz', 'Packages.bz2', 'Release', 'CydiaIcon.png', '.nojekyll']:
     shutil.copyfile(out / name, name)
-print('PASS: two cameras and Dock, one page, one APT category, flat file layout')
+print('PASS: two cameras and Dock in debs/, valid APT metadata, no website')

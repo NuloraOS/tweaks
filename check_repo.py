@@ -47,7 +47,9 @@ assert len(packages) == 3
 for block in packages:
     values = dict(line.split(': ', 1) for line in block.splitlines() if ': ' in line and not line.startswith(' '))
     assert values['Section'] == 'Tweaks'
+    assert values['Filename'].startswith('./debs/')
     assert values['Package'] in {'com.theipos.camera','com.theipos.o2camera','com.theipos.dock'}
     data = (root / values['Filename'].removeprefix('./')).read_bytes()
     assert hashlib.sha256(data).hexdigest() == values['SHA256']
 print('PASS Sileo Release fields + missing-Components regression + all index hashes + two cameras and Dock + one category')
+assert not (root / 'index.html').exists(), 'No website requested'
