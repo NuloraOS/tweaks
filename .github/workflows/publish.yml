@@ -1,0 +1,36 @@
+name: Publish all tweaks together
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '41 * * * *'
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 sync.py
+      - name: Keep all DEBs together in GitHub
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add '*.deb' Packages Packages.gz Packages.bz2 Release CydiaIcon.png index.html .nojekyll
+          git diff --cached --quiet || git commit -m 'Update all four tweaks together'
+          git push origin HEAD:main
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - uses: actions/deploy-pages@v4
+        id: deploy
