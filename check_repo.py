@@ -43,10 +43,11 @@ for field, algorithm in [('md5sum', 'md5'), ('sha1', 'sha1'), ('sha256', 'sha256
         data = (root / filename).read_bytes()
         assert len(data) == int(size) and hashlib.new(algorithm, data).hexdigest() == checksum
 packages = plain.decode('utf8').strip().split('\n\n')
-assert len(packages) == 4
+assert len(packages) == 3
 for block in packages:
     values = dict(line.split(': ', 1) for line in block.splitlines() if ': ' in line and not line.startswith(' '))
     assert values['Section'] == 'Tweaks'
+    assert values['Package'] in {'com.theipos.camera','com.theipos.o2camera','com.theipos.dock'}
     data = (root / values['Filename'].removeprefix('./')).read_bytes()
     assert hashlib.sha256(data).hexdigest() == values['SHA256']
-print('PASS Sileo Release fields + missing-Components regression + all index hashes + four DEBs + one category')
+print('PASS Sileo Release fields + missing-Components regression + all index hashes + two cameras and Dock + one category')

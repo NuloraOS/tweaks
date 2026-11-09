@@ -21,6 +21,7 @@ index = fetch('Packages').decode('utf8')
 records, cards = [], []
 descriptions = {
     'camera': 'Камера с удержанием горизонта, записью видео и белым / жёлтым экранным светом.',
+    'o2camera': 'Отдельная камера для ролика: оранжевые элементы, круговой зум, ручные параметры. Реальная основная запись 1080p/30; надписи 4K/60 — демонстрационные.',
     'dock': 'Закруглённая панель с пятью местами для приложений. Радиус и прозрачность — в настройках.',
     'motion': 'Размытие движения в поддерживаемых анимациях UIKit. Сила эффекта — в настройках.',
     'glass': 'Стеклянное оформление совместимых панелей и фона строки времени и батареи.'
@@ -28,6 +29,8 @@ descriptions = {
 for block in index.split('\n\n'):
     p = dict(line.split(': ', 1) for line in block.splitlines() if ': ' in line and not line.startswith(' '))
     if not p.get('Package'):
+        continue
+    if p['Package'] not in {'com.theipos.camera','com.theipos.o2camera','com.theipos.dock'}:
         continue
     path = p['Filename'].removeprefix('./')
     if not re.fullmatch(r'[A-Za-z0-9_./+\-]+', path) or '..' in path.split('/') or path.startswith('/'):
@@ -49,8 +52,8 @@ for block in index.split('\n\n'):
     (out / icon).write_bytes(fetch('Icons/nelora-' + kind + '.png'))
     name, version, description = html.escape(p['Name']), html.escape(p['Version']), html.escape(descriptions.get(kind, p.get('Description', '')))
     cards.append(f'<article><img src="{icon}" alt="" width="56" height="56"><div><h2>{name}</h2><small>{version} · iOS 12 / Chimera</small><p>{description}</p></div><a class="download" href="{html.escape(filename)}" download>Скачать DEB</a></article>')
-if len(records) != 4:
-    raise ValueError('Expected four published packages')
+if len(records) != 3:
+    raise ValueError('Expected two cameras and Dock; keep the previous source if builds are incomplete')
 index = ('\n\n'.join(records) + '\n\n').encode('utf8')
 (out / 'Packages').write_bytes(index)
 (out / 'Packages.gz').write_bytes(gzip.compress(index, mtime=0))
@@ -68,4 +71,4 @@ page = pathlib.Path('page.html').read_text(encoding='utf8').replace('__CARDS__',
 (out / 'index.html').write_text(page, encoding='utf8')
 for name in ['Packages', 'Packages.gz', 'Packages.bz2', 'Release', 'CydiaIcon.png', 'index.html', '.nojekyll']:
     shutil.copyfile(out / name, name)
-print('PASS: four verified DEBs, one page, one APT category, flat file layout')
+print('PASS: two cameras and Dock, one page, one APT category, flat file layout')
