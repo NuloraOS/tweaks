@@ -21,6 +21,10 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Use verified camera builds directly
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 release-input.py
       - run: python3 sync.py
       - name: Validate Sileo Release contract and package integrity
         run: python3 check_repo.py

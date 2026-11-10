@@ -10,6 +10,12 @@ BASE = 'https://koziavkamurz-wq.github.io/Nelora/'
 out = pathlib.Path('public')
 out.mkdir(exist_ok=True)
 def fetch(name, limit=2*1024*1024):
+    staged = pathlib.Path('.verified-release') / name.removeprefix('./')
+    if staged.is_file():
+        data = staged.read_bytes()
+        if len(data) > limit:
+            raise ValueError('Staged file too large')
+        return data
     with urllib.request.urlopen(BASE + name, timeout=90) as response:
         data = response.read(limit + 1)
     if len(data) > limit:
