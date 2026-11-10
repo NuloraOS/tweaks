@@ -1,49 +1,46 @@
 Package: com.theipos.camera
-Version: 0.4.3
+Name: Nelora Camera
+Version: 0.4.4
 Architecture: iphoneos-arm
-Maintainer: Nelora
 Depends: firmware (>= 12.0)
 Conflicts: com.theipos.motion, com.theipos.glass
-Filename: ./debs/com.theipos.camera_0.4.3_iphoneos-arm.deb
-Size: 16338122
-MD5sum: f4fcf2de31898af1d64f1a9e612a6917
-SHA1: 67596ada2b39e969a49eab90994783ba9278bf23
-SHA256: 5b789d0730545814bfe31830935ffab907f012cebd01f282109ae3c36828c116
+Maintainer: Nelora
+Author: Nelora
 Section: Tweaks
 Description: Standalone camera with bounded GPU preview, gallery and software horizon lock. O2 demo labels do not change real recording format.
-Author: Nelora
-Name: Nelora Camera
-
-Package: com.theipos.dock
-Version: 0.4.3
-Architecture: iphoneos-arm
-Maintainer: Nulora
-Installed-Size: 140
-Depends: firmware (>= 12.0), firmware (<< 13.0), mobilesubstrate, preferenceloader
-Conflicts: com.theipos.motion, com.theipos.glass
-Filename: ./debs/com.theipos.dock_0.4.3_iphoneos-arm.deb
-Size: 19448
-MD5sum: 3433aca06c9a61ff2585f28a2a7bb1c1
-SHA1: 8c68df668a675813018610bbf516d910251432cd
-SHA256: ca38d112484492df6ec55aa07a4f659b647ea2ba45b5329d06a72528bb63b764
-Section: Tweaks
-Description: Rounded translucent home screen dock with five app slots and separate preferences. iOS 12 only.
-Author: Nulora
-Name: Nulora Dock
+Filename: ./debs/com.theipos.camera_0.4.4_iphoneos-arm.deb
+Size: 16338960
+SHA256: 3646f21fe5969e574b921c5d6bcaf5f1708bc3d2c6a8473bbc5abefb8c5a2083
+Icon: https://nuloraos.github.io/tweaks/icon-camera.png
 
 Package: com.theipos.o2camera
-Version: 0.4.3
+Name: Камера
+Version: 0.4.4
 Architecture: iphoneos-arm
-Maintainer: Nelora
 Depends: firmware (>= 12.0)
 Conflicts: com.theipos.motion, com.theipos.glass
-Filename: ./debs/com.theipos.o2camera_0.4.3_iphoneos-arm.deb
-Size: 16761296
-MD5sum: 3c45ba275e912dffb7c7cb855d7fc5ba
-SHA1: 4d06379c0db886422ed55410feec06739138c55a
-SHA256: 54abe0bafe482b0e608f10e28dd0fc713be4920c557338be548ac9ad2b5f137a
+Maintainer: Nelora
+Author: Nelora
 Section: Tweaks
 Description: Standalone camera with bounded GPU preview, gallery and software horizon lock. O2 demo labels do not change real recording format.
-Author: Nelora
-Name: Камера
+Filename: ./debs/com.theipos.o2camera_0.4.4_iphoneos-arm.deb
+Size: 16759946
+SHA256: d530b59476695e3af01824e1d8e184586c6202c3e5f5eab4e31c6fd78d71e139
+Icon: https://nuloraos.github.io/tweaks/icon-o2camera.png
+
+Package: com.theipos.dock
+Name: Nulora Dock
+Depends: firmware (>= 12.0), firmware (<< 13.0), mobilesubstrate, preferenceloader
+Description: Rounded translucent home screen dock with five app slots and separate preferences. iOS 12 only.
+Conflicts: com.theipos.motion, com.theipos.glass
+Maintainer: Nulora
+Author: Nulora
+Section: Tweaks
+Architecture: iphoneos-arm
+Version: 0.4.3
+Installed-Size: 140
+Filename: ./debs/com.theipos.dock_0.4.3_iphoneos-arm.deb
+Size: 19460
+SHA256: dad0513f287ea20abd6c05f1f1a42dcce2557d77caab61d2b9a714e87de3d62f
+Icon: https://nuloraos.github.io/tweaks/icon-dock.png
 
